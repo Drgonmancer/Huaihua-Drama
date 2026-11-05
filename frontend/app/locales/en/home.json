@@ -1,0 +1,93 @@
+{
+  "home": {
+    "brand": {
+      "name": "Huaihua",
+      "em": "Drama",
+      "aria": "Huaihua Drama home"
+    },
+    "nav": {
+      "projects": "Projects",
+      "settings": "Settings",
+      "recharge": "Recharge",
+      "openMenu": "Open menu",
+      "label": "Main navigation"
+    },
+    "menu": {
+      "creditLabel": "Current credits"
+    },
+    "hero": {
+      "titleLead": "Turn a piece of text",
+      "titleGlow": "into",
+      "titleMid": "a full",
+      "titleTail": "short drama",
+      "lead": "From raw text to a formatted script, character & scene extraction, voice assignment, and shot breakdown, then image & video generation and final assembly — one pipeline produces the entire short drama.",
+      "create": "New Project",
+      "continue": "Continue last drama"
+    },
+    "stats": {
+      "projects": "Active projects",
+      "episodes": "Planned episodes",
+      "characters": "Character assets"
+    },
+    "pane": {
+      "unit": "Credits · Shared across all AI generation",
+      "perCall": "Per call",
+      "points": "{n} credits",
+      "agent": "Agent call",
+      "image": "Image generation",
+      "video": "Video generation"
+    },
+    "ticker": {
+      "tag": "Pricing",
+      "image": "Image",
+      "configure": "Configure"
+    },
+    "unit": {
+      "credits": "credits"
+    },
+    "section": {
+      "title": "My Projects",
+      "sub": "{n} projects in total · Click one to open its workspace",
+      "new": "+ New"
+    },
+    "card": {
+      "episodes": "{n} eps",
+      "delete": "Delete {title}"
+    },
+    "empty": {
+      "title": "Create your first short drama",
+      "desc": "An AI-powered production pipeline from script to final cut"
+    },
+    "modal": {
+      "title": "New Short Drama",
+      "desc": "Fill in the basics and jump straight into the workspace",
+      "name": "Project name *",
+      "namePlaceholder": "e.g. Urban romance drama \"Time Post Office\"",
+      "episodes": "Planned episodes",
+      "style": "Visual style",
+      "stylePlaceholder": "Choose a style",
+      "cancel": "Cancel",
+      "create": "Create project"
+    },
+    "meta": {
+      "title": "Huaihua Drama · AI Short Drama Studio",
+      "description": "An AI short-drama production pipeline from script to screen: script rewriting, character & scene extraction, voice assignment, shot breakdown, image & video generation, and final assembly.",
+      "ogTitle": "Huaihua Drama · AI Short Drama Studio",
+      "ogDescription": "An AI short-drama production pipeline from script to screen"
+    },
+    "credit": {
+      "syncing": "Syncing"
+    },
+    "toast": {
+      "deleted": "Deleted",
+      "rechargeLocal": "Recharge is not connected yet; local credits mode is active"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{n} min ago",
+      "hoursAgo": "{n} hr ago",
+      "daysAgo": "{n} d ago"
+    },
+    "deleteConfirm": "Delete \"{title}\"? This action cannot be undone."
+  }
+}

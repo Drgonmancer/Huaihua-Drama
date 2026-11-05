@@ -1,0 +1,21 @@
+{
+  "components": {
+    "baseSelect": {
+      "placeholder": "请选择...",
+      "searchPlaceholder": "搜索...",
+      "noResults": "无匹配结果"
+    },
+    "credits": {
+      "user": "用户",
+      "loading": "积分加载中…",
+      "localCredits": "{n} 积分（本地）",
+      "credits": "{n} 积分",
+      "syncing": "积分同步中",
+      "pricing": "Agent {agent} · 生图 {image} · {video}"
+    },
+    "kpiHome": {
+      "title": "返回 KPI 工作工具首页",
+      "backHome": "返回首页"
+    }
+  }
+}

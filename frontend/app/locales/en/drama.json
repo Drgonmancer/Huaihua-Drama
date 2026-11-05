@@ -1,0 +1,85 @@
+{
+  "drama": {
+    "loading": {
+      "title": "Opening project",
+      "desc": "Loading episodes, characters and scene assets…"
+    },
+    "error": {
+      "title": "Unable to open project",
+      "notAvailable": "This project doesn't exist or is temporarily unavailable. Please try again.",
+      "loadFailed": "Failed to load the project. Please try again."
+    },
+    "backToList": "Back to projects",
+    "projectList": "Projects",
+    "reload": "Reload",
+    "refreshing": "Refreshing…",
+    "retry": "Retry",
+    "addEpisode": "Add episode",
+    "meta": {
+      "characters": "{n} characters",
+      "scenes": "{n} scenes"
+    },
+    "overview": {
+      "ariaLabel": "Project content overview"
+    },
+    "tabs": {
+      "episodes": "Episodes",
+      "episodesCopy": "{n} episodes with finished scripts",
+      "characters": "Characters",
+      "charactersCopy": "Character assets shared across the project",
+      "scenes": "Scenes",
+      "scenesCopy": "Scene assets shared across the project"
+    },
+    "sections": {
+      "episodeList": "Episode list"
+    },
+    "episodes": {
+      "openAria": "Open {name}",
+      "fallbackTitle": "Episode {n}",
+      "scriptReady": "Script ready",
+      "scriptPending": "Pending script"
+    },
+    "empty": {
+      "episodes": "Click \"Add episode\" above to create the first one"
+    },
+    "assets": {
+      "characters": "Character assets",
+      "scenes": "Scene assets",
+      "unnamedCharacter": "Unnamed character",
+      "unnamedScene": "Unnamed scene",
+      "noTime": "Time not set",
+      "noAppearance": "No appearance description yet",
+      "noDescription": "No scene description yet",
+      "emptyCharacters": "No character assets yet",
+      "emptyScenes": "No scene assets yet",
+      "emptyHint": "Assets extracted in the episode workspace will appear here.",
+      "viewEpisodes": "View episodes"
+    },
+    "dialog": {
+      "title": "Create new episode",
+      "badge": "Config will lock",
+      "sub": "Lock image, video and audio generation services for this episode in advance. Once created, these generation pipelines will always follow this episode's config.",
+      "cancel": "Cancel",
+      "basicTitle": "Basics",
+      "basicCopy": "Only affects the display name, not the generation config",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Named automatically by episode number",
+      "titleHint": "Leave blank to name it automatically by episode number, e.g. \"Episode 3\".",
+      "configTitle": "Generation config",
+      "configCopy": "Locked after creation — choose the right ones here",
+      "imageLabel": "Image config",
+      "imagePlaceholder": "Select an image plan",
+      "videoLabel": "Video config",
+      "videoPlaceholder": "Select a video plan",
+      "audioLabel": "Audio config (optional)",
+      "audioPlaceholder": "Optional (no voiceover will be generated)",
+      "pricingFootnote": "Credits are deducted after creation: Agent {agent} · Image {image} · Video billed per second · Compositing/concatenation free",
+      "footCopy": "After creation, the image, video and audio generation entries in the workspace will be locked to this episode.",
+      "creating": "Creating...",
+      "create": "Create & lock config"
+    },
+    "toast": {
+      "episodeAdded": "New episode added"
+    }
+  }
+}

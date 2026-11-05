@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>槐花短剧 · AI 短剧制作工作台</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+
+:root{
+  --ink:#0A0E1A; --ink2:#121829; --hua:#FFF8E7;
+  --magenta:#FF2E88; --cyan:#00F0FF; --gold:#FFC033;
+  /* 金色三段：高光 / 本色 / 暗部，用于金属浮雕质感 */
+  --gold-hi:#FFE0A0; --gold-lo:#B87A00;
+  --dim:#8896B8; --line:rgba(255,248,231,.10);
+  --font-black:'Archivo Black','Noto Sans SC',sans-serif;
+  --font-mono:'JetBrains Mono','Noto Sans SC',monospace;
+  --font-body:'Noto Sans SC',-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--ink)}
+body{
+  font-family:var(--font-body); color:var(--hua); background:var(--ink);
+  min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+/* 夜色底 + 灯牌光晕 */
+body::before{
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(700px circle at 12% 8%, rgba(255,46,136,.20), transparent 62%),
+    radial-gradient(620px circle at 88% 12%, rgba(0,240,255,.16), transparent 60%),
+    radial-gradient(900px circle at 50% 100%, rgba(255,184,0,.10), transparent 66%);
+}
+/* 扫描线 */
+body::after{
+  content:''; position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.35;
+  background:repeating-linear-gradient(180deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px);
+}
+.wrap{position:relative; z-index:2; max-width:1280px; margin:0 auto; padding:0 32px}
+
+/* ── 槐花飘落 ── */
+.petals{position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden}
+.petal{
+  position:absolute; top:-40px; width:9px; height:9px; opacity:0;
+  background:var(--hua); border-radius:60% 10% 60% 10%;
+  box-shadow:0 0 8px rgba(255,248,231,.55);
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  0%{opacity:0; transform:translateY(0) rotate(0deg)}
+  8%{opacity:.85}
+  92%{opacity:.5}
+  100%{opacity:0; transform:translateY(105vh) translateX(70px) rotate(520deg)}
+}
+
+/* ── 导航 ── */
+.nav{
+  position:sticky; top:0; z-index:60; backdrop-filter:blur(18px);
+  background:rgba(10,14,26,.82); border-bottom:1px solid var(--line);
+}
+.nav-in{display:flex; align-items:center; gap:26px; height:64px}
+.brand{display:flex; align-items:center; gap:11px; text-decoration:none}
+.brand-mark{
+  width:34px; height:34px; border-radius:9px; display:grid; place-items:center;
+  background:linear-gradient(145deg, var(--magenta), var(--gold));
+  box-shadow:0 0 18px rgba(255,46,136,.5);
+}
+.brand-name{font-family:var(--font-black); font-size:18px; letter-spacing:.02em; color:var(--hua)}
+.brand-name em{font-style:normal; color:var(--magenta); text-shadow:0 0 14px rgba(255,46,136,.75)}
+.nav-links{display:flex; gap:22px; margin-left:10px}
+.nav-links a{
+  font-size:13px; color:var(--dim); text-decoration:none; font-weight:500;
+  transition:color .18s;
+}
+.nav-links a:hover, .nav-links a.on{color:var(--hua)}
+.nav-links a.on{text-shadow:0 0 12px rgba(0,240,255,.6)}
+.nav-right{margin-left:auto; display:flex; align-items:center; gap:12px}
+
+/* 霓虹钱包 */
+.wallet{
+  display:flex; align-items:center; gap:9px; padding:8px 15px; border-radius:999px;
+  border:1px solid rgba(255,192,51,.44);
+  background:linear-gradient(180deg, rgba(255,192,51,.14), rgba(255,192,51,.05));
+  font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--gold-hi);
+  box-shadow:inset 0 1px 0 rgba(255,224,160,.22), 0 0 20px -4px rgba(255,192,51,.32);
+}
+/* 金币：径向渐变做出球面受光，不再是一块纯色 */
+.coin{width:16px; height:16px; border-radius:50%; position:relative;
+  background:radial-gradient(circle at 34% 28%, var(--gold-hi), var(--gold) 58%, var(--gold-lo));
+  box-shadow:0 0 10px rgba(255,192,51,.7)}
+.coin::after{content:''; position:absolute; inset:4.5px; border-radius:50%;
+  background:rgba(10,14,26,.5)}
+
+/* 充值按钮：三段渐变 + 顶部内高光，做出金属浮雕 */
+.btn-recharge{
+  padding:8px 18px; border-radius:999px; border:none; cursor:pointer;
+  font-family:var(--font-body); font-size:13px; font-weight:800; color:#2A1A00;
+  background:linear-gradient(180deg, var(--gold-hi), var(--gold) 62%, var(--gold-lo));
+  box-shadow:0 4px 18px -4px rgba(255,192,51,.7), inset 0 1px 0 rgba(255,255,255,.5);
+  transition:transform .15s, filter .15s;
+}
+.btn-recharge:hover{transform:translateY(-1px); filter:brightness(1.07)}
+
+/* ── Hero ── */
+.hero{padding:64px 0 44px; display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px; padding:5px 13px; border-radius:999px;
+  border:1px solid rgba(0,240,255,.4); background:rgba(0,240,255,.07);
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--cyan);
+  text-transform:uppercase; margin-bottom:20px;
+}
+.eyebrow i{width:6px; height:6px; border-radius:50%; background:var(--cyan);
+  box-shadow:0 0 9px var(--cyan); animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1} 50%{opacity:.28}}
+.hero h1{
+  font-family:var(--font-black); font-size:clamp(38px,5.2vw,66px); line-height:1.12;
+  letter-spacing:-.01em; margin-bottom:18px;
+}
+.hero h1 .glow{
+  color:var(--hua);
+  text-shadow:0 0 8px rgba(255,248,231,.55), 0 0 26px rgba(255,46,136,.65), 0 0 52px rgba(255,46,136,.35);
+}
+.hero h1 .cyan{
+  color:var(--cyan);
+  text-shadow:0 0 8px rgba(0,240,255,.6), 0 0 30px rgba(0,240,255,.45);
+}
+.hero p{font-size:15px; line-height:1.85; color:var(--dim); max-width:520px; margin-bottom:30px}
+.hero-cta{display:flex; gap:13px; flex-wrap:wrap}
+.btn-lg{
+  display:inline-flex; align-items:center; gap:9px; padding:15px 30px; border-radius:12px;
+  border:none; cursor:pointer; font-size:15.5px; font-weight:800; font-family:var(--font-body);
+  background:linear-gradient(135deg, var(--magenta), #FF6B35); color:#fff;
+  box-shadow:0 10px 32px -8px rgba(255,46,136,.6), inset 0 1px 0 rgba(255,255,255,.28);
+  transition:transform .16s, box-shadow .16s;
+}
+.btn-lg:hover{transform:translateY(-2px);
+  box-shadow:0 14px 40px -8px rgba(255,46,136,.78), inset 0 1px 0 rgba(255,255,255,.32)}
+.btn-ghost-lg{
+  display:inline-flex; align-items:center; gap:9px; padding:14px 24px; border-radius:12px;
+  border:1px solid var(--line); background:rgba(255,248,231,.04); color:var(--hua);
+  cursor:pointer; font-size:14px; font-weight:600; font-family:var(--font-body);
+  transition:border-color .18s, background .18s;
+}
+.btn-ghost-lg:hover{border-color:rgba(0,240,255,.5); background:rgba(0,240,255,.07)}
+
+.hero-stats{display:flex; gap:26px; margin-top:34px; padding-top:26px; border-top:1px solid var(--line)}
+.hstat b{display:block; font-family:var(--font-mono); font-size:26px; font-weight:700; color:var(--hua);
+  text-shadow:0 0 16px rgba(0,240,255,.35); margin-bottom:3px}
+.hstat span{font-size:12px; color:var(--dim)}
+
+/* Hero 右侧消费卡 */
+.consume{
+  border:1px solid rgba(255,184,0,.28); border-radius:18px; padding:22px;
+  background:linear-gradient(160deg, rgba(255,184,0,.09), rgba(255,46,136,.05));
+  box-shadow:0 24px 60px -28px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,248,231,.10);
+}
+.consume-top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px}
+.consume-label{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--dim); text-transform:uppercase}
+.consume-num{font-family:var(--font-mono); font-size:42px; font-weight:700; color:var(--gold-hi);
+  line-height:1; letter-spacing:.01em;
+  text-shadow:0 0 8px rgba(255,224,160,.55), 0 0 26px rgba(255,192,51,.5)}
+.consume-unit{font-size:12px; color:var(--dim); margin-top:5px}
+.burn{font-family:var(--font-mono); font-size:11px; color:var(--magenta); margin-top:12px}
+.bar{height:7px; border-radius:99px; background:rgba(255,248,231,.10); overflow:hidden; margin:14px 0 8px}
+.bar i{display:block; height:100%; border-radius:99px;
+  background:linear-gradient(90deg, var(--gold), var(--magenta)); box-shadow:0 0 12px rgba(255,184,0,.6)}
+.consume-foot{display:flex; justify-content:space-between; font-size:11.5px; color:var(--dim)}
+.signin{display:flex; gap:6px; margin-top:18px}
+.signin span{
+  flex:1; height:30px; border-radius:7px; border:1px solid var(--line);
+  display:grid; place-items:center; font-family:var(--font-mono); font-size:10.5px; color:var(--dim);
+}
+.signin span.done{
+  border-color:rgba(255,184,0,.55); background:rgba(255,184,0,.14); color:var(--gold);
+  box-shadow:0 0 12px rgba(255,184,0,.28);
+}
+.signin span.today{border-color:var(--magenta); color:var(--magenta); animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 rgba(255,46,136,0)} 50%{box-shadow:0 0 14px rgba(255,46,136,.55)}}
+
+/* ── 限时礼包 ticker ── */
+.ticker{
+  border:1px solid rgba(255,46,136,.32); border-radius:14px; overflow:hidden; margin-bottom:40px;
+  background:linear-gradient(100deg, rgba(255,46,136,.12), rgba(255,184,0,.08));
+}
+.ticker-in{display:flex; align-items:center; gap:16px; padding:14px 20px}
+.ticker-tag{
+  font-family:var(--font-black); font-size:12px; color:#fff; padding:5px 11px; border-radius:6px;
+  background:var(--magenta); box-shadow:0 0 18px rgba(255,46,136,.65); white-space:nowrap;
+}
+.ticker-txt{font-size:13.5px; color:var(--hua); flex:1}
+.ticker-txt b{color:var(--gold-hi); font-family:var(--font-mono)}
+.cd{display:flex; gap:5px; font-family:var(--font-mono)}
+.cd i{
+  font-style:normal; background:rgba(10,14,26,.72); border:1px solid var(--line);
+  padding:4px 8px; border-radius:6px; font-size:14px; font-weight:700; color:var(--cyan);
+  min-width:36px; text-align:center;
+}
+/* 金色小按钮（立即抢 / 新建）：与充值按钮同一套金属语言 */
+.btn-sm{
+  padding:9px 18px; border-radius:9px; border:none; cursor:pointer; white-space:nowrap;
+  font-family:var(--font-body); font-size:13px; font-weight:800; color:#2A1A00;
+  background:linear-gradient(180deg, var(--gold-hi), var(--gold) 62%, var(--gold-lo));
+  box-shadow:0 4px 16px -4px rgba(255,192,51,.66), inset 0 1px 0 rgba(255,255,255,.46);
+  transition:transform .15s, filter .15s;
+}
+.btn-sm:hover{transform:translateY(-1px); filter:brightness(1.07)}
+
+/* ── 项目区 ── */
+.sec-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:22px}
+.sec-title{font-family:var(--font-black); font-size:22px; letter-spacing:.01em}
+.sec-sub{font-size:13px; color:var(--dim); margin-top:5px}
+.grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(292px,1fr)); gap:20px; padding-bottom:56px}
+.card{
+  border:1px solid var(--line); border-radius:16px; overflow:hidden; cursor:pointer;
+  background:linear-gradient(165deg, rgba(255,248,231,.055), rgba(255,248,231,.015));
+  transition:transform .2s, border-color .2s, box-shadow .2s;
+}
+.card:hover{
+  transform:translateY(-4px); border-color:rgba(255,46,136,.55);
+  box-shadow:0 18px 44px -18px rgba(255,46,136,.45), 0 0 0 1px rgba(255,46,136,.14);
+}
+.card-strip{
+  display:flex; justify-content:space-around; padding:8px 14px;
+  border-bottom:1px solid var(--line); background:rgba(0,0,0,.25);
+}
+.card-strip i{width:9px; height:7px; border-radius:2px; background:rgba(255,248,231,.13); transition:background .2s}
+.card:hover .card-strip i:nth-child(2){background:var(--magenta); box-shadow:0 0 8px var(--magenta)}
+.card:hover .card-strip i:nth-child(4){background:var(--cyan); box-shadow:0 0 8px var(--cyan)}
+.card-body{padding:17px 18px}
+.card-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:11px}
+.ep{
+  font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.06em;
+  color:var(--cyan); padding:3px 9px; border-radius:5px;
+  border:1px solid rgba(0,240,255,.32); background:rgba(0,240,255,.08);
+}
+.del{
+  width:26px; height:26px; border-radius:6px; display:grid; place-items:center; cursor:pointer;
+  border:1px solid transparent; background:transparent; color:var(--dim); opacity:0; transition:all .18s;
+}
+.card:hover .del{opacity:1}
+.del:hover{border-color:rgba(255,46,136,.5); color:var(--magenta); background:rgba(255,46,136,.10)}
+.card-title{font-size:15.5px; font-weight:700; line-height:1.42; margin-bottom:12px}
+.card-meta{display:flex; gap:13px; flex-wrap:wrap; font-size:12px; color:var(--dim)}
+.card-meta span{display:inline-flex; align-items:center; gap:4px}
+.card-foot{padding:12px 18px 15px; border-top:1px solid var(--line); display:flex; align-items:center; gap:12px}
+.prog{flex:1; height:4px; border-radius:99px; background:rgba(255,248,231,.10); overflow:hidden}
+.prog i{display:block; height:100%; border-radius:99px;
+  background:linear-gradient(90deg, var(--cyan), var(--magenta)); box-shadow:0 0 10px rgba(0,240,255,.5)}
+.pct{font-family:var(--font-mono); font-size:11px; color:var(--dim)}
+.empty{
+  grid-column:1/-1; border:1.5px dashed rgba(255,248,231,.20); border-radius:16px;
+  padding:54px 30px; text-align:center; cursor:pointer; transition:all .2s;
+}
+.empty:hover{border-color:var(--magenta); background:rgba(255,46,136,.06)}
+.empty-t{font-size:14.5px; font-weight:700; margin:12px 0 6px}
+.empty-d{font-size:12.5px; color:var(--dim)}
+
+/* ── 弹窗 ── */
+.mask{
+  position:fixed; inset:0; z-index:100; display:none; place-items:center;
+  background:rgba(4,6,12,.82); backdrop-filter:blur(6px); padding:20px;
+}
+.mask.on{display:grid}
+.modal{
+  width:100%; max-width:470px; border-radius:18px; padding:30px;
+  border:1px solid rgba(255,46,136,.32);
+  background:linear-gradient(165deg, #161C30, #0C1120);
+  box-shadow:0 40px 90px -30px rgba(0,0,0,.95);
+  animation:pop .22s ease-out;
+}
+@keyframes pop{from{opacity:0; transform:scale(.95) translateY(10px)} to{opacity:1; transform:none}}
+.modal h2{font-family:var(--font-black); font-size:20px; margin-bottom:7px}
+.modal .md{font-size:13px; color:var(--dim); margin-bottom:22px}
+.fld{margin-bottom:16px}
+.fld label{display:block; font-size:12.5px; font-weight:600; margin-bottom:7px; color:var(--hua)}
+.fld input, .fld select{
+  width:100%; padding:11px 13px; border-radius:9px; font-size:13.5px; font-family:var(--font-body);
+  border:1px solid var(--line); background:rgba(0,0,0,.32); color:var(--hua); outline:none;
+  transition:border-color .18s, box-shadow .18s;
+}
+.fld input:focus, .fld select:focus{border-color:var(--magenta); box-shadow:0 0 0 3px rgba(255,46,136,.14)}
+.fld-row{display:grid; grid-template-columns:1fr 1fr; gap:13px}
+.modal-act{display:flex; justify-content:flex-end; gap:10px; margin-top:8px}
+.btn-cancel{
+  padding:11px 20px; border-radius:9px; cursor:pointer; font-family:var(--font-body);
+  font-size:13.5px; font-weight:600; border:1px solid var(--line); background:transparent; color:var(--dim);
+}
+.btn-ok{
+  padding:11px 22px; border-radius:9px; cursor:pointer; border:none; font-family:var(--font-body);
+  font-size:13.5px; font-weight:700; color:#fff;
+  background:linear-gradient(135deg, var(--magenta), #FF6B35); box-shadow:0 8px 24px -8px rgba(255,46,136,.7);
+}
+
+/* ── 页脚 ── */
+.foot{border-top:1px solid var(--line); padding:28px 0 40px}
+.foot-in{display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap}
+.foot-brand{font-family:var(--font-black); font-size:14px; color:var(--hua)}
+.foot-brand em{font-style:normal; color:var(--magenta)}
+.foot-links{display:flex; gap:20px}
+.foot-links a{font-size:12.5px; color:var(--dim); text-decoration:none; transition:color .18s}
+.foot-links a:hover{color:var(--hua)}
+.foot-c{font-size:12px; color:var(--dim); font-family:var(--font-mono)}
+
+@media (max-width:1000px){
+  .hero{grid-template-columns:1fr; gap:34px; padding-top:44px}
+  .nav-links{display:none}
+  .wrap{padding:0 20px}
+}
+@media (max-width:560px){
+  .hero-stats{gap:18px}
+  .fld-row{grid-template-columns:1fr}
+  .ticker-in{flex-wrap:wrap; gap:10px}
+}
+</style>
+</head>
+<body>
+
+<div class="petals" id="petals" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">
+      <span class="brand-mark">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+          <path d="M12 21c0-5 3-9 8-10-1 6-4 9-8 10z"/><path d="M12 21c0-5-3-9-8-10 1 6 4 9 8 10z"/><path d="M12 21v-7"/>
+        </svg>
+      </span>
+      <span class="brand-name">槐花<em>短剧</em></span>
+    </a>
+    <div class="nav-links">
+      <a href="#top" class="on">工作台</a>
+      <a href="#projects">我的项目</a>
+      <a href="#projects">素材库</a>
+      <a href="#projects">计费</a>
+    </div>
+    <div class="nav-right">
+      <div class="wallet"><span class="coin"></span><span id="walletNum">9,999</span></div>
+      <button class="btn-recharge" data-recharge>充值</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+
+  <section class="hero">
+    <div class="hero-left">
+      <span class="eyebrow"><i></i>AI SHORT DRAMA STUDIO</span>
+      <h1>把一段文字<br><span class="glow">拍成</span>一整部<span class="cyan">短剧</span></h1>
+      <p>从原始文本到格式化剧本、角色场景提取、音色分配、分镜拆解，再到图片视频生成与成片拼接 —— 一条流水线跑完整部短剧。</p>
+      <div class="hero-cta">
+        <button class="btn-lg" data-new>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          新建项目
+        </button>
+        <button class="btn-ghost-lg" data-demo>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          看一个成片
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><b id="s1">3</b><span>进行中项目</span></div>
+        <div class="hstat"><b id="s2">42</b><span>已生成镜头</span></div>
+        <div class="hstat"><b id="s3">6</b><span>角色资产</span></div>
+      </div>
+    </div>
+
+    <aside class="hero-right">
+      <div class="consume">
+        <div class="consume-top">
+          <div>
+            <div class="consume-label">CREDIT BALANCE</div>
+            <div class="consume-num" id="balNum">9,999</div>
+            <div class="consume-unit">积分 · 可用于所有 AI 生成</div>
+          </div>
+          <div style="text-align:right">
+            <div class="consume-label">TODAY</div>
+            <div style="font-family:var(--font-mono);font-size:15px;color:var(--cyan);margin-top:6px">-120</div>
+          </div>
+        </div>
+        <div class="burn">本集预计消耗 ≈ 480 积分</div>
+        <div class="bar"><i id="balBar" style="width:76%"></i></div>
+        <div class="consume-foot"><span>7,600 / 10,000</span><span>距下一档套餐</span></div>
+        <div class="signin" id="signin">
+          <span class="done">一</span><span class="done">二</span><span class="done">三</span>
+          <span class="done">四</span><span class="today">五</span><span>六</span><span>日</span>
+        </div>
+        <div style="font-size:11.5px;color:var(--dim);margin-top:10px">连续签到 4 天 · 明日可领 <b style="color:var(--gold);font-family:var(--font-mono)">+30</b></div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-in">
+      <span class="ticker-tag">限时</span>
+      <span class="ticker-txt">槐花初夏礼 · 充值 <b>6,000</b> 积分送 <b>1,500</b>，再赠 <b>3</b> 次角色三视图生成</span>
+      <div class="cd" id="cd"><i>02</i>:<i>41</i>:<i>36</i></div>
+      <button class="btn-sm" data-recharge>立即抢</button>
+    </div>
+  </div>
+
+  <section id="projects">
+    <div class="sec-head">
+      <div>
+        <div class="sec-title">我的项目</div>
+        <div class="sec-sub">共 <span id="cnt">3</span> 个项目 · 点击进入工作台继续制作</div>
+      </div>
+      <button class="btn-sm" data-new>+ 新建</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div class="foot-brand">槐花<em>短剧</em></div>
+    <div class="foot-links">
+      <a href="#top">工作台</a><a href="#projects">我的项目</a><a href="#top">计费说明</a><a href="#top">帮助</a>
+    </div>
+    <div class="foot-c">© 2026 HUAIHUA DRAMA</div>
+  </div>
+</footer>
+
+<div class="mask" id="mask">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <h2 id="mt">新建短剧项目</h2>
+    <div class="md">填写基本信息，立即进入工作台开始制作</div>
+    <form id="form">
+      <div class="fld">
+        <label for="f1">项目名称 *</label>
+        <input id="f1" class="f1" placeholder="例如：都市情感短剧《时光邮局》" required>
+      </div>
+      <div class="fld-row">
+        <div class="fld">
+          <label for="f2">计划集数</label>
+          <input id="f2" type="number" value="1" min="1" max="100">
+        </div>
+        <div class="fld">
+          <label for="f3">视觉风格</label>
+          <select id="f3">
+            <option value="realistic">realistic</option>
+            <option value="anime">anime</option>
+            <option value="ghibli">ghibli</option>
+            <option value="cinematic">cinematic</option>
+            <option value="comic">comic</option>
+            <option value="watercolor">watercolor</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-act">
+        <button type="button" class="btn-cancel" data-close>取消</button>
+        <button type="submit" class="btn-ok">创建项目</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var PETAL_COUNT = 26;
+
+  function petals() {
+    var box = document.getElementById('petals');
+    if (!box) return;
+    var html = '';
+    for (var i = 0; i < PETAL_COUNT; i++) {
+      var left = (Math.random() * 100).toFixed(2);
+      var dur = (9 + Math.random() * 11).toFixed(2);
+      var delay = (Math.random() * 14).toFixed(2);
+      var size = (6 + Math.random() * 6).toFixed(1);
+      html += '<span class="petal" style="left:' + left + '%;width:' + size + 'px;height:' + size + 'px;' +
+        'animation-duration:' + dur + 's;animation-delay:' + delay + 's"></span>';
+    }
+    box.innerHTML = html;
+  }
+
+  var PROJECTS = [
+    { id: 1, title: '都市悬疑剧《bug来了》', eps: 3, chars: 6, scenes: 11, prog: 67, date: '6月30日' },
+    { id: 2, title: '古风志怪《槐下夜话》', eps: 12, chars: 9, scenes: 18, prog: 25, date: '昨天' },
+    { id: 3, title: '都市情感《时光邮局》', eps: 8, chars: 5, scenes: 7, prog: 0, date: '3天前' }
+  ];
+
+  function icon(kind) {
+    if (kind === 'user') return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>';
+  }
+
+  function render() {
+    var grid = document.getElementById('grid');
+    if (!grid) return;
+    var html = '';
+    for (var i = 0; i < PROJECTS.length; i++) {
+      var p = PROJECTS[i];
+      html += '<article class="card" data-id="' + p.id + '">' +
+        '<div class="card-strip"><i></i><i></i><i></i><i></i><i></i></div>' +
+        '<div class="card-body">' +
+        '<div class="card-top"><span class="ep">' + p.eps + ' 集</span>' +
+        '<button class="del" data-del="' + p.id + '" aria-label="删除 ' + p.title + '">' +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/></svg>' +
+        '</button></div>' +
+        '<h3 class="card-title">' + p.title + '</h3>' +
+        '<div class="card-meta"><span>' + icon('user') + p.chars + ' 角色</span><span>' + icon('scene') + p.scenes + ' 场景</span></div>' +
+        '</div>' +
+        '<div class="card-foot"><div class="prog"><i style="width:' + p.prog + '%"></i></div>' +
+        '<span class="pct">' + p.prog + '%</span><span class="pct">' + p.date + '</span></div>' +
+        '</article>';
+    }
+    html += '<div class="empty" data-new>' +
+      '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>' +
+      '<div class="empty-t">再开一部新剧</div><div class="empty-d">从剧本到成片，AI 助力的短剧制作流水线</div></div>';
+    grid.innerHTML = html;
+  }
+
+  function countdown() {
+    var box = document.getElementById('cd');
+    if (!box) return;
+    var total = 2 * 3600 + 41 * 60 + 36;
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    function tick() {
+      total = total > 0 ? total - 1 : 2 * 3600;
+      var h = Math.floor(total / 3600), m = Math.floor((total % 3600) / 60), s = total % 60;
+      box.innerHTML = '<i>' + pad(h) + '</i><i>' + pad(m) + '</i><i>' + pad(s) + '</i>';
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  function countUp() {
+    var targets = [['s1', 3], ['s2', 42], ['s3', 6]];
+    for (var i = 0; i < targets.length; i++) {
+      (function (id, target) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var cur = 0, step = Math.max(1, Math.round(target / 26));
+        var t = setInterval(function () {
+          cur += step;
+          if (cur >= target) { cur = target; clearInterval(t); }
+          el.textContent = cur;
+        }, 22);
+      })(targets[i][0], targets[i][1]);
+    }
+  }
+
+  function modal() {
+    var mask = document.getElementById('mask');
+    if (!mask) return;
+    function open() { mask.classList.add('on'); }
+    function close() { mask.classList.remove('on'); }
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-new]') || t.closest('[data-recharge]')) {
+        if (t.closest('[data-recharge]')) { open(); return; }
+        open();
+        return;
+      }
+      if (t.closest('[data-close]')) { close(); return; }
+      if (t.closest('[data-demo]')) { return; }
+      var d = t.closest('[data-del]');
+      if (d) {
+        e.stopPropagation();
+        var id = d.getAttribute('data-del');
+        var p = PROJECTS.filter(function (x) { return String(x.id) === id; })[0];
+        if (p && window.confirm('确定删除「' + p.title + '」？此操作不可恢复。')) {
+          PROJECTS = PROJECTS.filter(function (x) { return String(x.id) !== id; });
+          render();
+          var c = document.getElementById('cnt');
+          if (c) c.textContent = String(PROJECTS.length);
+        }
+      }
+    });
+    mask.addEventListener('click', function (e) { if (e.target === mask) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && mask.classList.contains('on')) close();
+    });
+    var form = document.getElementById('form');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var title = document.getElementById('f1');
+        var eps = document.getElementById('f2');
+        var style = document.getElementById('f3');
+        if (!title || !title.value.trim()) { title.focus(); return; }
+        PROJECTS.unshift({
+          id: Date.now(),
+          title: title.value.trim(),
+          eps: Number(eps.value) || 1,
+          chars: 0, scenes: 0, prog: 0, date: '刚刚'
+        });
+        render();
+        var c = document.getElementById('cnt');
+        if (c) c.textContent = String(PROJECTS.length);
+        title.value = '';
+        close();
+      });
+    }
+  }
+
+  petals();
+  render();
+  countdown();
+  countUp();
+  modal();
+})();
+</script>
+</body>
+</html>

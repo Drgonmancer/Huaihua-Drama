@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>槐花短剧 · 首页方案评审记录</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;900&family=IBM+Plex+Mono:wght@400;500&family=Spectral:wght@400;600&family=Noto+Serif+SC:wght@400;600;900&display=swap');
+
+:root{
+  --paper:#FBFAF6; --ink:#141412; --ink-2:#4A4740; --ink-3:#86817A;
+  --rule:#E2DFD6; --red:#C8362B;
+  --font-title:'Archivo','Noto+Serif+SC',sans-serif;
+  --font-body:'Spectral','Noto Serif SC',Georgia,serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:15px; line-height:1.85; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--red); text-decoration:none; border-bottom:1px solid rgba(200,54,43,.32)}
+a:hover{border-bottom-color:var(--red)}
+
+.layout{display:grid; grid-template-columns:236px minmax(0,1fr); max-width:1360px; margin:0 auto; padding:0 32px}
+
+/* ── 左侧目录 ── */
+.toc{position:sticky; top:0; align-self:start; height:100vh; padding:44px 26px 44px 0;
+  border-right:1px solid var(--rule); overflow-y:auto}
+.toc-brand{font-family:var(--font-title); font-weight:900; font-size:17px; letter-spacing:-.02em;
+  line-height:1.3; margin-bottom:6px}
+.toc-sub{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-3); letter-spacing:.1em;
+  text-transform:uppercase; margin-bottom:26px}
+.toc-nav{display:flex; flex-direction:column; gap:1px}
+.toc-nav a{
+  display:flex; gap:11px; align-items:baseline; padding:7px 0; font-size:13px; color:var(--ink-2);
+  border-bottom:none; transition:color .14s;
+}
+.toc-nav a:hover{color:var(--ink)}
+.toc-nav a.on{color:var(--red)}
+.toc-nav a i{font-family:var(--font-mono); font-size:10.5px; font-style:normal; color:var(--ink-3); flex-shrink:0}
+.toc-nav a.on i{color:var(--red)}
+.toc-foot{margin-top:28px; padding-top:18px; border-top:1px solid var(--rule);
+  font-family:var(--font-mono); font-size:10.5px; color:var(--ink-3); line-height:1.9}
+
+/* ── 正文 ── */
+main{padding:44px 0 90px 44px; min-width:0}
+.sec{padding-bottom:52px; margin-bottom:52px; border-bottom:1px solid var(--rule)}
+.sec:last-child{border-bottom:none}
+.sec-num{font-family:var(--font-mono); font-size:11px; color:var(--red); letter-spacing:.16em;
+  margin-bottom:12px}
+h1{font-family:var(--font-title); font-weight:900; font-size:clamp(30px,4vw,46px); line-height:1.14;
+  letter-spacing:-.025em; margin-bottom:18px}
+h2{font-family:var(--font-title); font-weight:900; font-size:26px; line-height:1.2; letter-spacing:-.02em;
+  margin-bottom:14px}
+h3{font-family:var(--font-title); font-weight:900; font-size:18px; line-height:1.3; margin-bottom:9px}
+p{margin-bottom:14px; color:var(--ink-2)}
+p strong{color:var(--ink); font-weight:600}
+.lead{font-size:16.5px; color:var(--ink-2); max-width:720px}
+ul{margin:0 0 14px 20px; color:var(--ink-2)}
+li{margin-bottom:7px}
+li strong{color:var(--ink); font-weight:600}
+code{font-family:var(--font-mono); font-size:12.5px; background:#F1EFE8; padding:2px 6px;
+  border:1px solid var(--rule)}
+
+.note{border-left:4px solid var(--red); padding:14px 0 14px 18px; margin:20px 0;
+  background:#F7F5EF}
+.note p{margin-bottom:8px}
+.note p:last-child{margin-bottom:0}
+.note b{font-family:var(--font-title); font-weight:900}
+
+/* ── 方案卡 ── */
+.opt{border-top:3px solid var(--ink); padding-top:20px; margin-bottom:46px}
+.opt:last-child{margin-bottom:0}
+.opt-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.opt-badge{font-family:var(--font-mono); font-size:12px; font-weight:500; color:var(--paper);
+  background:var(--ink); padding:3px 10px; letter-spacing:.06em}
+.opt-name{font-family:var(--font-title); font-weight:900; font-size:23px; letter-spacing:-.02em}
+.opt-concept{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3); letter-spacing:.04em;
+  margin-bottom:20px}
+
+.shot{border:1px solid var(--rule); background:#fff; margin-bottom:22px; overflow:hidden}
+.shot img{display:block; width:100%; height:392px; object-fit:cover; object-position:top center}
+.shot-cap{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-3); padding:9px 14px;
+  border-top:1px solid var(--rule); letter-spacing:.04em; display:flex; justify-content:space-between;
+  gap:14px; flex-wrap:wrap}
+
+.spec{display:grid; grid-template-columns:132px minmax(0,1fr); gap:1px; background:var(--rule);
+  border:1px solid var(--rule); margin-bottom:20px}
+.spec dt{background:#F7F5EF; padding:11px 14px; font-family:var(--font-mono); font-size:11px;
+  color:var(--ink-2); letter-spacing:.06em}
+.spec dd{background:var(--paper); padding:11px 14px; font-size:13.5px; color:var(--ink-2)}
+
+.swatches{display:flex; gap:0; border:1px solid var(--rule); margin-bottom:20px}
+.sw{flex:1; height:52px; position:relative}
+.sw span{position:absolute; bottom:5px; left:6px; font-family:var(--font-mono); font-size:9px;
+  color:rgba(255,255,255,.92); letter-spacing:.04em}
+.sw.dark span{color:rgba(0,0,0,.72)}
+
+.verdict{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule);
+  border:1px solid var(--rule); margin-bottom:20px}
+.verdict > div{background:var(--paper); padding:15px 16px}
+.verdict h4{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; margin-bottom:9px;
+  color:var(--ink-3)}
+.verdict ul{margin:0 0 0 16px; font-size:13.5px}
+.verdict li{margin-bottom:6px}
+
+.open-btn{display:inline-block; font-family:var(--font-title); font-weight:900; font-size:13px;
+  letter-spacing:.04em; color:var(--paper); background:var(--ink); padding:11px 22px; border-bottom:none}
+.open-btn:hover{background:var(--red)}
+
+/* ── 对比表 ── */
+.tbl{width:100%; border-collapse:collapse; font-size:13.5px; margin:20px 0}
+.tbl th, .tbl td{border:1px solid var(--rule); padding:11px 13px; text-align:left; vertical-align:top}
+.tbl th{background:#F7F5EF; font-family:var(--font-mono); font-size:11px; font-weight:500;
+  letter-spacing:.06em; color:var(--ink-2)}
+.tbl td:first-child{font-weight:600; color:var(--ink); white-space:nowrap}
+.tbl tr.hl td{background:#FFF9F7}
+
+.fail{font-size:13.5px; color:var(--ink-3); margin-top:14px; padding-top:14px;
+  border-top:1px dashed var(--rule)}
+.fail b{color:var(--ink-2); font-weight:600}
+.gone{display:inline-block; font-family:var(--font-mono); font-size:11px; letter-spacing:.08em;
+  color:var(--ink-3); padding:11px 0; border-bottom:1px dashed var(--rule)}
+.tag-pick{display:inline-block; font-family:var(--font-mono); font-size:10.5px; font-weight:500;
+  letter-spacing:.1em; color:var(--paper); background:var(--red); padding:4px 10px}
+
+@media (max-width:920px){
+  .layout{grid-template-columns:1fr; padding:0 20px}
+  .toc{position:static; height:auto; border-right:none; border-bottom:1px solid var(--rule);
+    padding:28px 0 20px}
+  .toc-nav{flex-direction:row; flex-wrap:wrap; gap:6px 18px}
+  main{padding:28px 0 60px}
+  .verdict{grid-template-columns:1fr}
+  .spec{grid-template-columns:1fr}
+  .spec dt{border-bottom:none}
+  .shot img{height:250px}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-brand">槐花短剧<br>首页方案评审</div>
+    <div class="toc-sub">Design Review · 5 Options</div>
+    <nav class="toc-nav" id="toc">
+      <a href="#s0"><i>00</i><span>本次改了什么</span></a>
+      <a href="#s1"><i>01</i><span>诊断与依据</span></a>
+      <a href="#s2"><i>02</i><span>方案 A 夜市霓虹</span></a>
+      <a href="#s3"><i>03</i><span>方案 B 多巴胺拼贴</span></a>
+      <a href="#s4"><i>04</i><span>方案 C CRT 控制台</span></a>
+      <a href="#s5"><i>05</i><span>方案 D 电商大促</span></a>
+      <a href="#s6"><i>06</i><span>方案 E 影院售票处</span></a>
+      <a href="#s7"><i>07</i><span>横向对比</span></a>
+      <a href="#s8"><i>08</i><span>我的建议</span></a>
+      <a href="#s9"><i>09</i><span>A2 加料版（淘汰）</span></a>
+      <a href="#s10"><i>10</i><span>A3 精修版</span></a>
+      <a href="#s11"><i>11</i><span>A4 金属按钮版</span></a>
+    </nav>
+    <div class="toc-foot">
+      5 套方案 · 单文件<br>零依赖 · 双击可开<br>未改动任何源码
+    </div>
+  </aside>
+
+  <main>
+
+    <section class="sec" id="s0">
+      <div class="sec-num">00 / 本次改了什么</div>
+      <h1>首页重做：从「短剧项目」到「槐花短剧」</h1>
+      <p class="lead">按你的要求，这轮做了三件事：改名、按「刺激消费欲望」重做视觉、并且<strong>一行源码都没动</strong>。下面 5 套方案都是独立单文件，双击就能在浏览器打开。</p>
+      <div class="note">
+        <p><b>当前进展</b></p>
+        <p>方案 A（夜市霓虹）<strong>已选定</strong>。按你的要求做了加强版 <strong>A2 霓虹不夜城</strong> —— 视觉密度和消费刺激都拉高一档，见第 09 章。</p>
+      </div>
+      <div class="note">
+        <p><b>待你拍板的事</b></p>
+        <p>1. A2 是否达到预期，还要不要继续加码<br>2. 是否需要把「积分消费」组件（签到、秒杀套餐、社会证明）接入后端真实数据<br>3. 确认后再进源码改造，届时会按 Vue 单文件组件重写，而不是把预览页直接搬过去</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s1">
+      <div class="sec-num">01 / 诊断与依据</div>
+      <h2>先看清楚：原来的首页缺什么</h2>
+      <p>现有首页是一个标准的工作台列表页：页头 + 「新建项目」按钮 + 项目卡片网格。功能上没问题，但它有一个根本问题 —— <strong>它完全没有「商业面」</strong>。</p>
+      <ul>
+        <li>整页看不到积分余额。而这个产品每一次生图、生视频都要扣积分，积分就是它的「货币」</li>
+        <li>没有任何充值入口。用户想花钱得先离开首页</li>
+        <li>「新建项目」只是普通按钮，没有稀缺感、没有引导、没有优惠刺激</li>
+        <li>项目卡片只堆信息（集数/角色/场景/进度），没有「继续做完它」的推动力</li>
+      </ul>
+
+      <h3>短剧产品的商业闭环到底靠什么</h3>
+      <p>我查了短剧赛道的变现资料（ReelShort、DramaBox、红果短剧等），有一个结论很明确：<strong>微短剧的付费逻辑更接近自动售货机，而不是 Netflix 的订阅制</strong>。它靠的是「小额、高频、即时」—— 用户一周内会完成 3 到 8 次小额购买，而不是买一次大套餐。</p>
+      <p>所以真正驱动消费的不是「套餐便宜」，而是这几个可复用的机制：</p>
+      <ul>
+        <li><strong>金币钱包</strong> —— 把余额摆在最显眼的位置，让「还剩多少」变成常驻信息</li>
+        <li><strong>每日签到</strong> —— 连续签到给递增奖励，养成每日回来的习惯</li>
+        <li><strong>限时礼包 + 倒计时</strong> —— 制造稀缺，把「以后再说」变成「现在决定」</li>
+        <li><strong>满减梯度</strong> —— 让用户为了凑单而多花，这是转化率最高的杠杆</li>
+        <li><strong>价格锚定</strong> —— 划掉的原价、对比的套餐档位，让价格看起来划算</li>
+      </ul>
+      <p>这五条我都做进了方案里，只是每套方案的<strong>表达方式完全不同</strong> —— 有的含蓄（影院票价），有的直白（电商满减）。</p>
+
+      <h3>视觉上往哪个方向走</h3>
+      <p>2026 年的设计趋势里，跟你「花里胡哨」这个要求最相关的有三条：<strong>反极简 / 控制型极繁</strong>（十年扁平灰白 SaaS 风已经让人脸盲）、<strong>多巴胺配色</strong>（高饱和、Y2K 回潮）、以及 <strong>游戏化</strong>（积分、等级、进度、连续签到）。这三条恰好和短剧的商业机制咬合得上。</p>
+      <p class="fail"><b>同时也要说清楚：</b>极繁主义有明确的失效场景 —— 高密度数据表格、企业级后台。首页属于「品牌面」而不是「产品面」，用极繁是对的；但工作台内部（分镜编辑、角色列表那些页面）建议保持现在的克制风格，不要一起改花。这条边界我在每套方案里都留了。</p>
+    </section>
+
+    <section class="sec" id="s2">
+      <div class="sec-num">02 / 方案 A</div>
+      <div class="opt">
+        <div class="opt-head"><span class="opt-badge">A</span><span class="opt-name">夜市霓虹</span></div>
+        <div class="opt-concept">NEON NIGHT MARKET · 槐花树下的夜市，霓虹灯牌 + 花瓣飘落</div>
+
+        <div class="shot">
+          <img src="shot-a-neon-nightmarket.png" alt="方案A 夜市霓虹 首页实拍" decoding="async">
+          <div class="shot-cap"><span>实拍 1440px 桌面端</span><span>style-a-neon-nightmarket.html</span></div>
+        </div>
+
+        <dl class="spec">
+          <dt>配色</dt><dd>墨蓝夜色基底 + 槐花白 + 霓虹洋红 / 霓虹青 / 灯牌金</dd>
+          <dt>字体</dt><dd>Archivo Black（超粗黑标题）+ JetBrains Mono（数字）+ 思源黑体 900</dd>
+          <dt>版式</dt><dd>居中大标题 + 右侧悬浮消费卡；大圆角 + 霓虹描边外发光</dd>
+          <dt>动效</dt><dd>槐花花瓣飘落、呼吸发光、CRT 扫描线、hover 描边点亮</dd>
+        </dl>
+        <div class="swatches">
+          <div class="sw" style="background:#0A0E1A"><span>#0A0E1A</span></div>
+          <div class="sw" style="background:#FFF8E7"><span class="dark" style="color:rgba(0,0,0,.72)">#FFF8E7</span></div>
+          <div class="sw" style="background:#FF2E88"><span>#FF2E88</span></div>
+          <div class="sw" style="background:#00F0FF"><span>#00F0FF</span></div>
+          <div class="sw" style="background:#FFB800"><span>#FFB800</span></div>
+        </div>
+
+        <div class="verdict">
+          <div>
+            <h4>优势</h4>
+            <ul>
+              <li>氛围感最强，暗色底让霓虹和金色钱包特别「贵」</li>
+              <li>「充值」按钮用金色发光，是全页最亮的元素，视觉上直接指向消费</li>
+              <li>槐花白花瓣飘落把品牌名落进了画面，不只是贴个名字</li>
+            </ul>
+          </div>
+          <div>
+            <h4>风险</h4>
+            <ul>
+              <li>霓虹效果一旦控制不好就会廉价化，这套是靠大量微调压住的</li>
+              <li>长时间看暗色界面偏压抑，白天办公场景下体验打折</li>
+              <li>花瓣 + 发光 + 扫描线三套动效叠加，低端设备会有性能开销</li>
+            </ul>
+          </div>
+        </div>
+        <a class="open-btn" href="../style-a-neon-nightmarket.html" target="_blank" rel="noopener noreferrer">打开方案 A →</a>
+      </div>
+    </section>
+
+    <section class="sec" id="s3">
+      <div class="sec-num">03 / 方案 B</div>
+      <div class="opt">
+        <div class="opt-head"><span class="opt-badge">B</span><span class="opt-name">多巴胺拼贴</span></div>
+        <div class="opt-concept">DOPAMINE COLLAGE · 槐花蜜罐头标签 + 杂志剪贴报</div>
+
+        <div class="shot">
+          <img src="shot-b-dopamine-collage.png" alt="方案B 多巴胺拼贴 首页实拍" decoding="async">
+          <div class="shot-cap"><span>实拍 1440px 桌面端</span><span>style-b-dopamine-collage.html</span></div>
+        </div>
+
+        <dl class="spec">
+          <dt>配色</dt><dd>奶油黄网格底 + 槐花紫 / 荧光绿 / 珊瑚橙 / 墨黑，四色撞色</dd>
+          <dt>字体</dt><dd>Archivo Black + 马善政手写体（批注）+ JetBrains Mono</dd>
+          <dt>版式</dt><dd>非对称拼贴，卡片旋转 ±1.6°；零圆角 + 3px 黑描边 + 硬阴影</dd>
+          <dt>动效</dt><dd>hover 时卡片位移归零（按下感）、贴纸摇摆</dd>
+        </dl>
+        <div class="swatches">
+          <div class="sw" style="background:#FFF3B0"><span class="dark" style="color:rgba(0,0,0,.72)">#FFF3B0</span></div>
+          <div class="sw" style="background:#7B4BFF"><span>#7B4BFF</span></div>
+          <div class="sw" style="background:#C6FF00"><span class="dark" style="color:rgba(0,0,0,.72)">#C6FF00</span></div>
+          <div class="sw" style="background:#FF6B4A"><span>#FF6B4A</span></div>
+          <div class="sw" style="background:#14110F"><span>#14110F</span></div>
+        </div>
+
+        <div class="verdict">
+          <div>
+            <h4>优势</h4>
+            <ul>
+              <li>最接近你说的「花里胡哨」，视觉记忆点最强，看一眼就忘不掉</li>
+              <li>潮牌感 / 年轻化，适合面向 C 端创作者的品牌表达</li>
+              <li>硬阴影 + 黑描边让所有可点元素边界清晰，反而很好点</li>
+            </ul>
+          </div>
+          <div>
+            <h4>风险</h4>
+            <ul>
+              <li>信息密度高，同一个屏里元素太多，长期使用会觉得吵</li>
+              <li>荧光绿 + 珊瑚 + 紫的撞色对色觉障碍用户不友好，我已尽量保证文字对比度达标，但纯色块的辨识仍受影响</li>
+              <li>手写体和贴纸属于「加料」，用多了会显得不够专业，目前每屏控制在 1 到 2 处</li>
+            </ul>
+          </div>
+        </div>
+        <span class="gone">方案文件已从目录移除 · 截图保留供参考</span>
+      </div>
+    </section>
+
+    <section class="sec" id="s4">
+      <div class="sec-num">04 / 方案 C</div>
+      <div class="opt">
+        <div class="opt-head"><span class="opt-badge">C</span><span class="opt-name">复古未来 CRT 控制台</span></div>
+        <div class="opt-concept">CASSETTE FUTURISM · 一台 1979 年的电影制片控制台</div>
+
+        <div class="shot">
+          <img src="shot-c-crt-console.png" alt="方案C CRT控制台 首页实拍" decoding="async">
+          <div class="shot-cap"><span>实拍 1440px 桌面端</span><span>style-c-crt-console.html</span></div>
+        </div>
+
+        <dl class="spec">
+          <dt>配色</dt><dd>琥珀磷光单色主调 + 深黑棕基底 + 磷光绿 / 信号红点缀</dd>
+          <dt>字体</dt><dd>Share Tech Mono + VT323 全站等宽（中文补思源黑体）</dd>
+          <dt>版式</dt><dd>设备机架式分层面板，凹陷内嵌质感；零圆角</dd>
+          <dt>动效</dt><dd>开机自检打字机、CRT 扫描线、光标闪烁、指示灯呼吸</dd>
+        </dl>
+        <div class="swatches">
+          <div class="sw" style="background:#0D0A06"><span>#0D0A06</span></div>
+          <div class="sw" style="background:#FFB000"><span class="dark" style="color:rgba(0,0,0,.72)">#FFB000</span></div>
+          <div class="sw" style="background:#7CFF6B"><span class="dark" style="color:rgba(0,0,0,.72)">#7CFF6B</span></div>
+          <div class="sw" style="background:#FF4D3D"><span>#FF4D3D</span></div>
+          <div class="sw" style="background:#3A2A05"><span>#3A2A05</span></div>
+        </div>
+
+        <div class="verdict">
+          <div>
+            <h4>优势</h4>
+            <ul>
+              <li>质感天花板。有真实出处（《异形》《银翼杀手》的磁带未来主义），不是凭空造的风格</li>
+              <li>「投币计费」这个隐喻和积分消费天然契合 —— 顶部大计数器就是余额，投币口就是充值</li>
+              <li>面板式布局天生适合承载「工具」，和工作台气质最连贯</li>
+            </ul>
+          </div>
+          <div>
+            <h4>风险</h4>
+            <ul>
+              <li>琥珀单色长时间观看会有视觉疲劳，且彩色信息（如不同状态）只能靠形状区分</li>
+              <li>娱乐感、情怀感强于商业感，刺激消费的直白度不如方案 D</li>
+              <li>等宽字体中文排版密度低，同样内容占更多纵向空间</li>
+            </ul>
+          </div>
+        </div>
+        <a class="open-btn" href="../style-c-crt-console.html" target="_blank" rel="noopener noreferrer">打开方案 C →</a>
+      </div>
+    </section>
+
+    <section class="sec" id="s5">
+      <div class="sec-num">05 / 方案 D</div>
+      <div class="opt">
+        <div class="opt-head"><span class="opt-badge">D</span><span class="opt-name">电商大促</span></div>
+        <div class="opt-concept">FLASH SALE · 把首页直接做成「槐花节」大促会场</div>
+
+        <div class="shot">
+          <img src="shot-d-flash-sale.png" alt="方案D 电商大促 首页实拍" decoding="async">
+          <div class="shot-cap"><span>实拍 1440px 桌面端</span><span>style-d-flash-sale.html</span></div>
+        </div>
+
+        <dl class="spec">
+          <dt>配色</dt><dd>大促红 + 金 + 橙的暖色渐变体系，奶白打底</dd>
+          <dt>字体</dt><dd>Archivo Black + JetBrains Mono（价格与大数字）+ 思源黑体 900</dd>
+          <dt>版式</dt><dd>电商货架流：大促横幅 → 优惠券区 → 满减进度 → 商品网格</dd>
+          <dt>动效</dt><dd>活动倒计时、抢购按钮呼吸缩放、库存进度条</dd>
+        </dl>
+        <div class="swatches">
+          <div class="sw" style="background:#E60012"><span>#E60012</span></div>
+          <div class="sw" style="background:#FFD700"><span class="dark" style="color:rgba(0,0,0,.72)">#FFD700</span></div>
+          <div class="sw" style="background:#FF6A00"><span>#FF6A00</span></div>
+          <div class="sw" style="background:#FFF6F2"><span class="dark" style="color:rgba(0,0,0,.72)">#FFF6F2</span></div>
+          <div class="sw" style="background:#7A0009"><span>#7A0009</span></div>
+        </div>
+
+        <div class="verdict">
+          <div>
+            <h4>优势</h4>
+            <ul>
+              <li>消费驱动力最直接。满减进度「还差 600 积分解锁」是转化率最高的一招</li>
+              <li>价格锚定完整：划线原价 + 立减标签 + 库存「已抢 4,163 份 / 剩余 837」</li>
+              <li>用户零学习成本，看一眼就知道这里能买什么、便宜多少</li>
+            </ul>
+          </div>
+          <div>
+            <h4>风险</h4>
+            <ul>
+              <li>最「促销」，品牌调性偏廉价。长期挂着会让首页看起来像个活动页而不是产品</li>
+              <li>常驻倒计时和库存数字需要真实数据支撑，否则一旦被用户发现是假的，信任直接崩</li>
+              <li>红金配色饱和度极高，大面积使用会视觉疲劳</li>
+            </ul>
+          </div>
+        </div>
+        <span class="gone">方案文件已从目录移除 · 截图保留供参考</span>
+      </div>
+    </section>
+
+    <section class="sec" id="s6">
+      <div class="sec-num">06 / 方案 E</div>
+      <div class="opt">
+        <div class="opt-head"><span class="opt-badge">E</span><span class="opt-name">影院售票处</span></div>
+        <div class="opt-concept">GOLDEN AGE BOX OFFICE · 黄金时代电影院的售票大厅</div>
+
+        <div class="shot">
+          <img src="shot-e-cinema-boxoffice.png" alt="方案E 影院售票处 首页实拍" decoding="async">
+          <div class="shot-cap"><span>实拍 1440px 桌面端</span><span>style-e-cinema-boxoffice.html</span></div>
+        </div>
+
+        <dl class="spec">
+          <dt>配色</dt><dd>丝绒红幕布 + 金（Art Deco 金线）+ 奶白票纸 + 深棕</dd>
+          <dt>字体</dt><dd>Cinzel（装饰艺术衬线标题）+ Poiret One + JetBrains Mono + 思源宋体</dd>
+          <dt>版式</dt><dd>对称售票窗口 + 三档票价牌 + 票根造型项目卡；金线描边</dd>
+          <dt>动效</dt><dd>顶部门头灯泡跑马灯、幕布褶皱纹理</dd>
+        </dl>
+        <div class="swatches">
+          <div class="sw" style="background:#7A1220"><span>#7A1220</span></div>
+          <div class="sw" style="background:#D4AF37"><span class="dark" style="color:rgba(0,0,0,.72)">#D4AF37</span></div>
+          <div class="sw" style="background:#F5EFE0"><span class="dark" style="color:rgba(0,0,0,.72)">#F5EFE0</span></div>
+          <div class="sw" style="background:#2B1B12"><span>#2B1B12</span></div>
+          <div class="sw" style="background:#E8CE7A"><span class="dark" style="color:rgba(0,0,0,.72)">#E8CE7A</span></div>
+        </div>
+
+        <div class="verdict">
+          <div>
+            <h4>优势</h4>
+            <ul>
+              <li>主题契合度最高。「短剧」本来就是影视内容，影院场景不需要任何解释</li>
+              <li>把「买积分」包装成「买票」，把「做一部剧」包装成「定档一部片」—— 付费心理门槛被调性抹平了</li>
+              <li>票价牌天然就是套餐选择器，比「充值套餐」这个词优雅得多</li>
+            </ul>
+          </div>
+          <div>
+            <h4>风险</h4>
+            <ul>
+              <li>Art Deco 装饰元素多（灯泡、金线、菱形、票根撕口），实现和维护成本最高</li>
+              <li>票根卡片为了造型牺牲了信息密度，如果以后要塞更多状态需要重新设计</li>
+              <li>衬线字体在小字号下清晰度不如无衬线，正文字号已相应放大</li>
+            </ul>
+          </div>
+        </div>
+        <a class="open-btn" href="../style-e-cinema-boxoffice.html" target="_blank" rel="noopener noreferrer">打开方案 E →</a>
+      </div>
+    </section>
+
+    <section class="sec" id="s7">
+      <div class="sec-num">07 / 横向对比</div>
+      <h2>放在一起比</h2>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>方案</th><th>个性强度</th><th>消费转化力</th><th>审美风险</th><th>性能开销</th><th>与短剧主题契合</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>A 夜市霓虹</td><td>强</td><td>中高</td><td>中（易廉价）</td><td>中（粒子 + 发光）</td><td>高</td></tr>
+          <tr><td>B 多巴胺拼贴</td><td>极强</td><td>高</td><td>中高（撞色有争议）</td><td>低</td><td>中高</td></tr>
+          <tr><td>C CRT 控制台</td><td>强</td><td>中</td><td>低</td><td>低</td><td>中</td></tr>
+          <tr><td>D 电商大促</td><td>中高</td><td>极强</td><td>高（易显廉价）</td><td>低</td><td>高</td></tr>
+          <tr class="hl"><td>E 影院售票处</td><td>强</td><td>高</td><td>低</td><td>中高</td><td>极高</td></tr>
+        </tbody>
+      </table>
+      <p class="fail"><b>关于「审美风险」这一列：</b>它衡量的是「这套风格被其他同行用烂、从而显得廉价」的概率。风险低不代表好看，只代表不容易翻车。</p>
+    </section>
+
+    <section class="sec" id="s8">
+      <div class="sec-num">08 / 我的建议</div>
+      <h2>选哪套</h2>
+      <p><strong>主站建议选 E（影院售票处），然后把 D 的消费组件搬进来。</strong></p>
+      <p>理由是这样的：E 只用「票价牌」三个字就解决了充值套餐的表达问题 —— 用户不会觉得「要我充钱」，而是觉得「我在买票看电影」。这个心理转换是 D 那种直白大促做不到的。而 E 缺的正是 D 最强的那部分：满减梯度、限时倒计时、优惠券。</p>
+      <p>所以最优解不是二选一，而是 <strong>E 当骨架 + D 当引擎</strong>：在 E 的票价区上方加一条满减进度，在票价牌旁边挂一张限时礼包券，就能同时拿到「高级感」和「转化力」。这两套的配色也不冲突 —— E 的金和 D 的金是同一个色系。</p>
+      <ul>
+        <li><strong>如果更想要视觉冲击和年轻化</strong>：选 B，它最贴近你说的「花里胡哨」，适合做品牌调性的宣示</li>
+        <li><strong>如果更想要沉浸氛围</strong>：选 A，暗色霓虹在演示和截图场景下最出片</li>
+        <li><strong>如果这是内部工具、只求转化不管调性</strong>：直接用 D，转化路径最短</li>
+        <li><strong>C 建议留作「彩蛋」</strong>：它质感最高但不适合当首页主视觉，更适合做成加载页、空状态页或者设置页的风格彩蛋</li>
+      </ul>
+      <div class="note">
+        <p><b>下一步</b></p>
+        <p>你选定后，我会把该方案按 Vue 单文件组件重写进 <code>frontend/app/pages/index.vue</code>，并补上这轮预览页为了简洁而省略的工程项：真实积分接口对接、移动端导航降级、无障碍与降级兜底、SEO 元信息。工作台内部页面的风格不会跟着改花。</p>
+      </div>
+      <p class="fail"><b>本节建议原文保留，不做事后修正。</b>你最终选了 A，而不是我推荐的主站 E —— 说明「夜市霓虹」那种高饱和、强氛围的观感比「优雅包装」更能打动你。这个判断偏差如实记录在此。</p>
+    </section>
+
+    <section class="sec" id="s9">
+      <div class="sec-num">09 / 存档</div>
+      <div class="opt">
+        <div class="opt-head">
+          <span class="opt-badge">A2</span>
+          <span class="opt-name">霓虹不夜城</span>
+          <span class="tag-pick" style="background:var(--ink-3)">已淘汰</span>
+        </div>
+        <div class="opt-concept">NEON BAZAAR · 一次失败的加料尝试：把「更花」错做成了「更挤」</div>
+        <div class="note" style="margin-bottom:22px">
+          <p><b>淘汰原因</b></p>
+          <p>这一版的做法是「每个元素都加亮、加密」：彩虹跑马灯、五色光斑、三色花瓣、透视网格、描边空心字一起上。结果背景变脏，配色纪律也崩了 —— 紫色和荧光绿混进了原来洋红 / 青 / 金的三色体系，整体反而比 A 更廉价。</p>
+          <p><b>教训：</b>「花里胡哨」指的是<strong>单个元素的冲击力</strong>，不是元素数量。深色底的价值在于衬托少量高强度霓虹，堆进去的元素越多，能分给每个元素的对比就越少。</p>
+        </div>
+
+        <div class="shot">
+          <img src="shot-a2-neon-bazaar.png" alt="方案A2 霓虹不夜城 首页实拍" decoding="async">
+          <div class="shot-cap"><span>实拍 1440px 桌面端</span><span>style-a2-neon-bazaar.html</span></div>
+        </div>
+
+        <h3 style="margin-top:22px">这次加了什么</h3>
+        <p>升级分两条线走：一条让画面更「闹」，一条让掏钱的理由更硬。A 原有的骨架、配色、字体一个没动，只在上面加料。</p>
+
+        <dl class="spec">
+          <dt>视觉加料</dt>
+          <dd>
+            顶部加了彩色跑马灯（洋红到青的渐变条，5 条促销信息无缝滚动）<br>
+            光斑从 3 团加到 5 团，新增紫与荧光绿<br>
+            底部铺了赛博透视网格，向远处收束<br>
+            花瓣从 26 片加到 42 片，并分红 / 青 / 金三色<br>
+            主标题「拍成」改成霓虹描边空心字<br>
+            卡片 hover 时有一道扫光划过
+          </dd>
+          <dt>消费加料</dt>
+          <dd>
+            新增<strong>限时秒杀区</strong>：三档套餐并排，中间档戴金色皇冠 + 放大 + 洋红发光，标注「已有 4,163 人抢」<br>
+            新增<strong>余额预警条</strong>：「余额低于 1,500 将中断自动连播」<br>
+            新增<strong>社会证明条</strong>：头像组 + 「今日已有 1,284 位创作者充值」+ 实时更新指示灯<br>
+            签到格新增<strong>第 7 天大奖</strong>：荧光绿标记「满 7 天再领 +200」<br>
+            套餐内赠品全部可视化：「另赠 +1,500 积分」「再赠 3 次角色三视图生成」<br>
+            充值按钮改为常驻呼吸发光
+          </dd>
+        </dl>
+
+        <table class="tbl">
+          <thead><tr><th>维度</th><th>A 夜市霓虹</th><th>A2 霓虹不夜城</th></tr></thead>
+          <tbody>
+            <tr><td>促销信息</td><td>单条横幅</td><td>顶部跑马灯 + 横幅双层</td></tr>
+            <tr><td>消费组件</td><td>钱包 + 签到 + 倒计时</td><td>再加秒杀区 / 余额预警 / 社会证明</td></tr>
+            <tr><td>紧迫感来源</td><td>倒计时</td><td>倒计时 + 余额预警 + 库存人数</td></tr>
+            <tr><td>页面高度</td><td>约 950px</td><td>约 2,000px</td></tr>
+            <tr><td>动效数量</td><td>4 处</td><td>7 处</td></tr>
+          </tbody>
+        </table>
+
+        <div class="verdict">
+          <div>
+            <h4>当时的思路</h4>
+            <ul>
+              <li>秒杀区把三档价格并排摆开，中间档用放大和金色皇冠直接告诉你「选这个」</li>
+              <li>余额预警是 A 缺的一环 —— 它把「该充值了」从用户自己的判断变成页面的提醒</li>
+              <li>社会证明条用人数和实时指示灯补上了「别人都在买」这一层</li>
+            </ul>
+          </div>
+          <div>
+            <h4>需要注意的地方</h4>
+            <ul>
+              <li>动效从 4 处加到 7 处，低配设备建议关掉部分花瓣和扫光</li>
+              <li>「1,284 人充值」「837 份剩余」这类数字<strong>必须接真实数据</strong>，假数字被识破会直接损害信任</li>
+              <li>页面长了一倍，如果首页访问频次很高，可以考虑把秒杀区折叠起来</li>
+            </ul>
+          </div>
+        </div>
+
+        <a class="open-btn" href="../style-a2-neon-bazaar.html" target="_blank" rel="noopener noreferrer">打开方案 A2 →</a>
+        <a class="open-btn" href="../style-a-neon-nightmarket.html" target="_blank" rel="noopener noreferrer" style="margin-left:10px;background:transparent;color:var(--ink);border:1px solid var(--rule)">对比原版 A</a>
+      </div>
+    </section>
+
+    <section class="sec" id="s10">
+      <div class="sec-num">10 / 定稿</div>
+      <div class="opt">
+        <div class="opt-head">
+          <span class="opt-badge">A3</span>
+          <span class="opt-name">霓虹精修版</span>
+          <span class="tag-pick">定稿</span>
+        </div>
+        <div class="opt-concept">NEON · REFINED · 回到 A 的克制，把力气花在单个元素的质量上</div>
+
+        <div class="shot">
+          <img src="shot-a3-neon-refined.png" alt="方案A3 霓虹精修版 首页实拍" decoding="async">
+          <div class="shot-cap"><span>实拍 1440px 桌面端</span><span>style-a3-neon-refined.html</span></div>
+        </div>
+
+        <h3 style="margin-top:22px">这一版做了什么</h3>
+        <p>核心动作是<strong>做减法 + 提质量</strong>。把 A2 加进去的五个元素拿掉四个，然后回头把保留下来的东西做得更讲究。</p>
+
+        <dl class="spec">
+          <dt>拿掉的</dt>
+          <dd>
+            彩虹跑马灯 → 换成深色 LED 屏（暗底 + 青色滚动字，两端有渐隐遮罩）<br>
+            五色光斑 → 回到三团，但位置更准、强度更高<br>
+            三色花瓣 → 回到单色槐花白，改用不同尺寸 + 水平摆动，更像真花<br>
+            透视网格 → 换成极淡的细网格，只在暗部隐约可见<br>
+            描边空心字 → 回到实心发光，但光晕加厚到三层
+          </dd>
+          <dt>重做的</dt>
+          <dd>
+            <strong>余额卡</strong>：数字放进「暗槽 + 发光」的 LED 计数器里，金属描边用双层渐变（内高光 + 外发光）<br>
+            <strong>秒杀区</strong>：从三张浮夸卡片改成玻璃展柜 —— 细线分隔、推荐档只靠顶部一道洋红到金的渐变线 + 一枚小标签，不用放大和皇冠<br>
+            <strong>余额提示</strong>：从刺眼的洋红改成琥珀色细线框，提醒但不扎眼<br>
+            <strong>签到</strong>：第 7 天大奖从荧光绿改回金色，不再破坏配色体系<br>
+            <strong>社会证明</strong>：去掉彩色头像组，只留一行文字 + 一个呼吸指示灯
+          </dd>
+        </dl>
+
+        <table class="tbl">
+          <thead><tr><th>维度</th><th>A 初版</th><th>A2 加料版（淘汰）</th><th>A3 精修版（定稿）</th></tr></thead>
+          <tbody>
+            <tr><td>用色</td><td>洋红 / 青 / 金</td><td>再加紫 + 荧光绿（失控）</td><td>洋红 / 青 / 金（严格三色）</td></tr>
+            <tr><td>光斑</td><td>3 团</td><td>5 团，含紫与绿</td><td>3 团，位置更准更亮</td></tr>
+            <tr><td>花瓣</td><td>26 片白色</td><td>42 片三色（像纸屑）</td><td>34 片白色，带水平摆动</td></tr>
+            <tr><td>余额呈现</td><td>普通大字</td><td>普通大字</td><td>LED 暗槽计数器</td></tr>
+            <tr><td>秒杀区</td><td>无</td><td>三张卡 + 皇冠 + 放大</td><td>玻璃展柜，细线分隔</td></tr>
+            <tr><td>配色纪律</td><td>守</td><td>破</td><td>守</td></tr>
+            <tr class="hl"><td>综合</td><td>好</td><td>明显退步</td><td>比初版更完整</td></tr>
+          </tbody>
+        </table>
+
+        <div class="verdict">
+          <div>
+            <h4>比 A 强在哪</h4>
+            <ul>
+              <li>钱包从「一个发光的大数字」变成有物理感的 LED 计数器，这是全页最值钱的细节</li>
+              <li>秒杀区补上了 A 缺的套餐选择，而且做得克制，没有拉低整页调性</li>
+              <li>余额提示、社会证明这两个转化组件在原版 A 里是缺的，现在补齐了</li>
+              <li>背景更纯净，霓虹的对比度反而比 A 更高</li>
+            </ul>
+          </div>
+          <div>
+            <h4>上线前要处理</h4>
+            <ul>
+              <li>「1,284 位创作者充值」「837 份剩余」必须接真实数据，给不出就删掉这行</li>
+              <li>倒计时同理 —— 假倒计时被识破的代价远大于它带来的转化</li>
+              <li>动效共 6 处，低配设备建议在设置里给一个「减少动态效果」开关（已用 <code>prefers-reduced-motion</code> 做了基础降级）</li>
+            </ul>
+          </div>
+        </div>
+
+        <a class="open-btn" href="../style-a3-neon-refined.html" target="_blank" rel="noopener noreferrer">打开方案 A3 →</a>
+        <a class="open-btn" href="../style-a2-neon-bazaar.html" target="_blank" rel="noopener noreferrer" style="margin-left:10px;background:transparent;color:var(--ink);border:1px solid var(--rule)">看被淘汰的 A2</a>
+      </div>
+    </section>
+
+    <section class="sec" id="s11">
+      <div class="sec-num">11 / 组合</div>
+      <div class="opt">
+        <div class="opt-head">
+          <span class="opt-badge">A4</span>
+          <span class="opt-name">金属按钮版</span>
+          <span class="tag-pick">最新</span>
+        </div>
+        <div class="opt-concept">A 的布局 + A3 的按钮质感 · 取两版各自最值钱的部分</div>
+
+        <div class="shot">
+          <img src="shot-a4-metal-cta.png" alt="方案A4 金属按钮版 首页实拍" decoding="async">
+          <div class="shot-cap"><span>实拍 1440px 桌面端</span><span>style-a4-metal-cta.html</span></div>
+        </div>
+
+        <h3 style="margin-top:22px">这一版做了什么</h3>
+        <p>第一版 A 的布局更紧凑（约 950px，A3 是 2000px），第三版 A3 的按钮质感更好。这一版把两者拼起来：<strong>页面结构完全沿用 A，只把金色按钮系统换成 A3 的做法。</strong></p>
+
+        <dl class="spec">
+          <dt>按钮怎么变</dt>
+          <dd>
+            原来：两段线性渐变（金 → 橙）+ 纯外发光 —— 平，像贴了一块黄色<br>
+            现在：<strong>三段渐变</strong>（高光 #FFE0A0 → 本色 #FFC033 → 暗部 #B87A00）+ <strong>顶部内高光</strong> + 柔和外发光<br>
+            文字色从纯黑改成深棕 <code>#2A1A00</code>，压在金属面上更自然<br>
+            hover 从「加大阴影」改成 <code>brightness(1.07)</code> —— 模拟金属受光，而不是飘起来
+          </dd>
+          <dt>连带调整</dt>
+          <dd>
+            <strong>金币图标</strong>：纯色圆改成径向渐变，做出球面受光<br>
+            <strong>钱包胶囊</strong>：加内高光 + 渐变底，文字改亮金 #FFE0A0<br>
+            <strong>余额大数字</strong>：改成亮金 + 双层光晕（近处柔光 + 远处扩散）<br>
+            <strong>主 CTA</strong>：洋红按钮补 <code>inset</code> 顶部高光，和金色按钮同一套语言
+          </dd>
+        </dl>
+
+        <table class="tbl">
+          <thead><tr><th>对比项</th><th>A 初版</th><th>A4 金属按钮版</th></tr></thead>
+          <tbody>
+            <tr><td>金色实现</td><td>两段渐变（金→橙）</td><td>三段渐变（高光→本色→暗部）</td></tr>
+            <tr><td>立体感</td><td>无内高光</td><td>顶部 1px 内高光</td></tr>
+            <tr><td>按钮文字</td><td>纯黑</td><td>深棕 #2A1A00</td></tr>
+            <tr><td>hover 反馈</td><td>阴影加大</td><td>亮度提升</td></tr>
+            <tr><td>金币图标</td><td>纯色 + 内圈</td><td>径向渐变球面</td></tr>
+            <tr class="hl"><td>页面结构</td><td colspan="2">完全一致（紧凑版，约 950px）</td></tr>
+          </tbody>
+        </table>
+
+        <div class="verdict">
+          <div>
+            <h4>为什么这样拼有效</h4>
+            <ul>
+              <li>按钮是首页点击密度最高的元素，它的质感直接决定「这个产品贵不贵」</li>
+              <li>A3 的整套消费组件（秒杀区 / 签到 / 社会证明）在 A4 里没有搬过来，页面保持紧凑</li>
+              <li>改的只是材质，没有动布局，所以不存在破坏原有节奏的风险</li>
+            </ul>
+          </div>
+          <div>
+            <h4>取舍</h4>
+            <ul>
+              <li>少了 A3 的秒杀区和三档套餐，用户看不到完整价格梯度</li>
+              <li>如果之后要补，建议只加「限时秒杀」一个区块，不要把签到和社会证明也塞回来</li>
+              <li>金色被整体调亮了一个色阶，如果觉得太跳，把 <code>--gold</code> 调回 #FFB800 即可</li>
+            </ul>
+          </div>
+        </div>
+
+        <a class="open-btn" href="../style-a4-metal-cta.html" target="_blank" rel="noopener noreferrer">打开方案 A4 →</a>
+        <a class="open-btn" href="../style-a-neon-nightmarket.html" target="_blank" rel="noopener noreferrer" style="margin-left:10px;background:transparent;color:var(--ink);border:1px solid var(--rule)">对比 A 初版</a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var links = document.querySelectorAll('#toc a');
+  var sections = [];
+  for (var i = 0; i < links.length; i++) {
+    var id = links[i].getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) sections.push({ link: links[i], el: el });
+  }
+  if (!sections.length) return;
+
+  function prefersReduce() {
+    try {
+      return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (e) { return false; }
+  }
+
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var probe = window.innerHeight * 0.34;
+    var best = null;
+    for (var i = 0; i < sections.length; i++) {
+      var r = sections[i].el.getBoundingClientRect();
+      if (r.top <= probe && r.bottom > probe) { best = sections[i]; break; }
+    }
+    if (!best) {
+      for (var j = 0; j < sections.length; j++) {
+        if (sections[j].el.getBoundingClientRect().top > probe) { best = sections[j]; break; }
+      }
+    }
+    for (var k = 0; k < sections.length; k++) {
+      if (best && sections[k] === best) sections[k].link.classList.add('on');
+      else sections[k].link.classList.remove('on');
+    }
+  }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(update);
+  }
+
+  if (prefersReduce()) {
+    update();
+  } else {
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+</body>
+</html>
