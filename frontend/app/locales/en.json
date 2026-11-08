@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "Huaihua Drama"
+  },
+  "common": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "test": "Test connection",
+    "loading": "Loading…"
+  },
+  "credits": {
+    "point": "credits",
+    "free": "Free",
+    "plan": "Plan {n}",
+    "video": {
+      "perShotBilling": "Video billed per shot",
+      "listCharge": "Video {a}→{b} credits/s · {d}",
+      "fromPerShot": "Video from {n} credits/shot",
+      "perSecond": "Video {n} credits/s",
+      "short": "Short video · {hint}{suffix}"
+    },
+    "image": {
+      "perImage": "{n} credits/image",
+      "standard": "Standard image · {n} credits/image{suffix}"
+    },
+    "agent": {
+      "perCall": "Agent {n} credits/call"
+    },
+    "audio": {
+      "freeOptional": "Voiceover · Free (optional)",
+      "none": "No voiceover · Free",
+      "compose": "Voiceover compose · Free"
+    }
+  }
+}

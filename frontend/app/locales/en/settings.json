@@ -1,0 +1,134 @@
+{
+  "settings": {
+    "nav": {
+      "services": "Services",
+      "agents": "Agents",
+      "skills": "Skills",
+      "backups": "Backups"
+    },
+    "language": {
+      "title": "Interface language",
+      "desc": "Applies immediately. Preference is stored in your browser.",
+      "zh": "中文",
+      "en": "English"
+    },
+    "group": {
+      "label": "Settings"
+    },
+    "svcType": {
+      "all": "All",
+      "text": "Text",
+      "image": "Image",
+      "video": "Video",
+      "audio": "Audio"
+    },
+    "agent": {
+      "script_rewriter": "Script Rewriter",
+      "extractor": "Character & Scene Extractor",
+      "storyboard_breaker": "Storyboard Breakdown",
+      "voice_assigner": "Voice Assignment",
+      "grid_prompt_generator": "Image Prompt Generator"
+    },
+    "field": {
+      "name": "Name",
+      "nameHint": "(leave blank to auto-generate)",
+      "provider": "Provider (adapter)",
+      "serviceType": "Service type",
+      "models": "Models",
+      "modelsHint": "(one per line, the first is the primary model)",
+      "priority": "Priority",
+      "status": "Status",
+      "description": "Description",
+      "apiKeySet": "Configured — leave blank to keep"
+    },
+    "status": {
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "connected": "Connected",
+      "testFailed": "Test failed",
+      "configured": "Configured",
+      "default": "Default",
+      "saved": "Saved"
+    },
+    "actions": {
+      "add": "Add service",
+      "delete": "Delete",
+      "test": "Test connection",
+      "save": "Save",
+      "download": "Download",
+      "cancel": "Cancel",
+      "create": "Create",
+      "createAndSave": "Create & save",
+      "resetPrompt": "Reset to default"
+    },
+    "preset": {
+      "title": "Quick setup · one-click apply",
+      "desc": "Paste a single API key to fill in default text / image / video / audio services and reset each agent's default models. Existing services with the same name will be overwritten.",
+      "keyPlaceholder": "Paste API key...",
+      "apply": "Apply to all services"
+    },
+    "services": {
+      "title": "Service Access",
+      "desc": "Manage the four AI service types: text, image, video and audio. Save and test connectivity in one click — catch configuration issues before a generation fails.",
+      "addTitle": "New Service Configuration",
+      "noBaseUrl": "Base URL not set",
+      "namePlaceholder": "e.g. Video generation service",
+      "emptyTitle": "No service configuration yet",
+      "emptyDesc": "Use \"Quick setup\" above to fill everything in at once, or click \"Add service\" to add one manually"
+    },
+    "test": {
+      "passed": "Test passed: {msg}",
+      "failed": "Test failed: {msg}",
+      "responsePreview": "Response preview"
+    },
+    "confirm": {
+      "deleteService": "Delete service \"{name}\"?",
+      "deleteSkill": "Delete skill \"{id}\"?"
+    },
+    "toast": {
+      "presetApplied": "Applied text/image/video/audio services and default agent models",
+      "configSaved": "Service configuration saved",
+      "configCreated": "Service configuration created",
+      "deleted": "Deleted",
+      "promptReset": "Prompt reset to default — click Save to apply",
+      "agentSaved": "{name} configuration saved",
+      "skillCreated": "Skill created",
+      "saved": "Saved",
+      "backupDone": "Backup completed"
+    },
+    "agents": {
+      "title": "Agent Advanced Configuration",
+      "desc": "Adjust each agent's prompts and runtime parameters. Changes take effect immediately after saving. Service access is managed centrally by the platform — no need to configure it here.",
+      "promptPlaceholder": "Agent system prompt..."
+    },
+    "skills": {
+      "agentList": "Agent list",
+      "desc": "Skills serve as an advanced prompt layer for agents and do not affect regular workbench features.",
+      "add": "Add skill",
+      "addTitle": "New Skill — {name}",
+      "dirName": "Skill directory name",
+      "dirNameHint": "(English, unique)",
+      "dirPlaceholder": "e.g. custom-extraction",
+      "namePlaceholder": "e.g. Custom extraction rules",
+      "descPlaceholder": "Briefly describe what this skill is for",
+      "contentPlaceholder": "Write SKILL.md content...",
+      "emptyTitle": "No skills yet",
+      "emptyDesc": "Click \"Add skill\" in the top right to create your first prompt file"
+    },
+    "backups": {
+      "title": "Data & Backup",
+      "desc": "The database is backed up automatically on every startup and on a daily 24-hour cycle (10 copies kept by default). To restore: stop the server, replace data/huaihua_drama.db with the backup file, then start it again.",
+      "cardTitle": "SQLite database backup",
+      "cardDesc": "Uses better-sqlite3 online consistent backup, safe to run while the service is up; the oldest backups beyond the limit are cleaned up automatically.",
+      "create": "Back up now",
+      "emptyTitle": "No backups yet",
+      "emptyDesc": "Click \"Back up now\" above to create the first backup"
+    },
+    "backupReason": {
+      "startup": "Startup",
+      "schedule": "Scheduled",
+      "pre-migrate": "Pre-migration",
+      "manual": "Manual"
+    }
+  }
+}

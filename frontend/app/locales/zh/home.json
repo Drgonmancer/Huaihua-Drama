@@ -1,0 +1,93 @@
+{
+  "home": {
+    "brand": {
+      "name": "槐花",
+      "em": "短剧",
+      "aria": "槐花短剧项目首页"
+    },
+    "nav": {
+      "projects": "项目",
+      "settings": "设置",
+      "recharge": "充值",
+      "openMenu": "打开菜单",
+      "label": "主导航"
+    },
+    "menu": {
+      "creditLabel": "当前积分"
+    },
+    "hero": {
+      "titleLead": "把一段文字",
+      "titleGlow": "拍成",
+      "titleMid": "一整部",
+      "titleTail": "短剧",
+      "lead": "从原始文本到格式化剧本、角色场景提取、音色分配、分镜拆解，再到图片视频生成与成片拼接 —— 一条流水线跑完整部短剧。",
+      "create": "新建项目",
+      "continue": "继续上次的剧"
+    },
+    "stats": {
+      "projects": "进行中项目",
+      "episodes": "已规划集数",
+      "characters": "角色资产"
+    },
+    "pane": {
+      "unit": "积分 · 全站 AI 生成通用",
+      "perCall": "单次消耗",
+      "points": "{n} 积分",
+      "agent": "Agent 调用",
+      "image": "图片生成",
+      "video": "视频生成"
+    },
+    "ticker": {
+      "tag": "计费",
+      "image": "生图",
+      "configure": "配置"
+    },
+    "unit": {
+      "credits": "积分"
+    },
+    "section": {
+      "title": "我的项目",
+      "sub": "共 {n} 个项目 · 点击进入工作台继续制作",
+      "new": "+ 新建"
+    },
+    "card": {
+      "episodes": "{n} 集",
+      "delete": "删除 {title}"
+    },
+    "empty": {
+      "title": "新建第一个短剧项目",
+      "desc": "从剧本到成片，AI 助力的短剧制作流水线"
+    },
+    "modal": {
+      "title": "新建短剧项目",
+      "desc": "填写基本信息，立即进入工作台开始制作",
+      "name": "项目名称 *",
+      "namePlaceholder": "例如：都市情感短剧《时光邮局》",
+      "episodes": "计划集数",
+      "style": "视觉风格",
+      "stylePlaceholder": "选择风格",
+      "cancel": "取消",
+      "create": "创建项目"
+    },
+    "meta": {
+      "title": "槐花短剧 · AI 短剧制作工作台",
+      "description": "从剧本到成片的 AI 短剧制作流水线：剧本改写、角色场景提取、音色分配、分镜拆解、图片与视频生成、成片拼接。",
+      "ogTitle": "槐花短剧 · AI 短剧制作工作台",
+      "ogDescription": "从剧本到成片的 AI 短剧制作流水线"
+    },
+    "credit": {
+      "syncing": "同步中"
+    },
+    "toast": {
+      "deleted": "已删除",
+      "rechargeLocal": "充值入口尚未接入，当前为本地积分模式"
+    },
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{n} 分钟前",
+      "hoursAgo": "{n} 小时前",
+      "daysAgo": "{n} 天前"
+    },
+    "deleteConfirm": "确定删除「{title}」？此操作不可恢复。"
+  }
+}

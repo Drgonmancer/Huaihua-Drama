@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "槐花短剧"
+  },
+  "common": {
+    "confirm": "确定",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "test": "测试连接",
+    "loading": "加载中…"
+  },
+  "credits": {
+    "point": "积分",
+    "free": "免费",
+    "plan": "方案 {n}",
+    "video": {
+      "perShotBilling": "视频按镜计费",
+      "listCharge": "视频 {a}→{b} 积分/秒 · {d}",
+      "fromPerShot": "视频 {n} 起/镜",
+      "perSecond": "视频 {n}/秒",
+      "short": "短视频 · {hint}{suffix}"
+    },
+    "image": {
+      "perImage": "生图 {n} 积分/张",
+      "standard": "标准生图 · {n} 积分/张{suffix}"
+    },
+    "agent": {
+      "perCall": "Agent {n} 积分/次"
+    },
+    "audio": {
+      "freeOptional": "配音 · 免费（可选）",
+      "none": "不生成配音 · 免费",
+      "compose": "配音合成 · 免费"
+    }
+  }
+}

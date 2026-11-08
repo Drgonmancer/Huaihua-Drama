@@ -1,0 +1,17 @@
+{
+  "components": {
+    "baseSelect": {
+      "placeholder": "Select...",
+      "searchPlaceholder": "Search...",
+      "noResults": "No matching results"
+    },
+    "credits": {
+      "user": "User",
+      "loading": "Loading credits…",
+      "localCredits": "{n} credits (local)",
+      "credits": "{n} credits",
+      "syncing": "Syncing credits",
+      "pricing": "Agent {agent} · Image {image} · {video}"
+    }
+  }
+}

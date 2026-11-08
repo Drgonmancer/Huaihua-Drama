@@ -1,0 +1,85 @@
+{
+  "drama": {
+    "loading": {
+      "title": "正在打开项目",
+      "desc": "正在读取剧集与角色、场景资产…"
+    },
+    "error": {
+      "title": "暂时无法打开项目",
+      "notAvailable": "项目不存在或暂时不可用，请重试。",
+      "loadFailed": "项目加载失败，请重试。"
+    },
+    "backToList": "返回项目列表",
+    "projectList": "项目列表",
+    "reload": "重新加载",
+    "refreshing": "刷新中…",
+    "retry": "重试",
+    "addEpisode": "添加集",
+    "meta": {
+      "characters": "{n} 角色",
+      "scenes": "{n} 场景"
+    },
+    "overview": {
+      "ariaLabel": "项目内容概览"
+    },
+    "tabs": {
+      "episodes": "剧集",
+      "episodesCopy": "{n} 集已完成剧本",
+      "characters": "角色",
+      "charactersCopy": "项目共享角色资产",
+      "scenes": "场景",
+      "scenesCopy": "项目共享场景资产"
+    },
+    "sections": {
+      "episodeList": "剧集列表"
+    },
+    "episodes": {
+      "openAria": "打开 {name}",
+      "fallbackTitle": "第 {n} 集",
+      "scriptReady": "已完成剧本",
+      "scriptPending": "待编写"
+    },
+    "empty": {
+      "episodes": "点击上方「添加集」创建第一集"
+    },
+    "assets": {
+      "characters": "角色资产",
+      "scenes": "场景资产",
+      "unnamedCharacter": "未命名角色",
+      "unnamedScene": "未命名场景",
+      "noTime": "未设时间",
+      "noAppearance": "暂无外貌描述",
+      "noDescription": "暂无场景描述",
+      "emptyCharacters": "暂无角色资产",
+      "emptyScenes": "暂无场景资产",
+      "emptyHint": "在剧集工作台提取后，项目资产将在这里展示。",
+      "viewEpisodes": "查看剧集"
+    },
+    "dialog": {
+      "title": "创建新集",
+      "badge": "配置将锁定",
+      "sub": "为这一集预先锁定图片、视频和音频生成服务。创建后，这些生成链路将始终跟随当前集配置。",
+      "cancel": "取消",
+      "basicTitle": "基础信息",
+      "basicCopy": "这一项只影响显示名称，不影响生成配置",
+      "titleLabel": "标题",
+      "titlePlaceholder": "默认按集数自动命名",
+      "titleHint": "留空时会自动按集数命名，例如“第 3 集”。",
+      "configTitle": "生成配置",
+      "configCopy": "创建后不可更改，建议在这里一次性选对",
+      "imageLabel": "图片配置",
+      "imagePlaceholder": "选择图片方案",
+      "videoLabel": "视频配置",
+      "videoPlaceholder": "选择视频方案",
+      "audioLabel": "音频配置（可选）",
+      "audioPlaceholder": "可不选（不生成配音）",
+      "pricingFootnote": "创建后按积分扣费：Agent {agent} · 生图 {image} · 视频按秒计费 · 合成/拼接免费",
+      "footCopy": "创建后，工作台中的图片、视频、音频生成入口都会锁定到当前集。",
+      "creating": "创建中...",
+      "create": "创建并锁定配置"
+    },
+    "toast": {
+      "episodeAdded": "已添加新集"
+    }
+  }
+}
